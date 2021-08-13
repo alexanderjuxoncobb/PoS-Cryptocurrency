@@ -8,14 +8,20 @@ from Block import Block
 
 class Wallet:
 
-    def __init__(self):
+    def __init__(self, key=None):
+        #if key:
+        #    self.keyPair = RSA.importKey(key)
+        #else:
+        #    self.keyPair = RSA.generate(2048)
+        #self.publicKey = key
         self.keyPair = RSA.generate(2048)
+        self.publicKey = key
 
     def fromKey(self, file):
         key = ''
         with open(file, 'r') as keyfile:
             key = RSA.importKey(keyfile.read())
-            self.keyPair = key
+        self.keyPair = key
 
     def sign(self, data):
         dataHash = BlockchainUtils.hash(data)
@@ -33,7 +39,10 @@ class Wallet:
         return signatureValid
 
     def publicKeyString(self):
-        publicKeyString = self.keyPair.publickey().exportKey('PEM').decode('utf-8')
+        if self.publicKey is None:
+            publicKeyString = self.keyPair.publickey().exportKey('PEM').decode('utf-8')
+        else:
+            publicKeyString = self.publicKey
         return publicKeyString
 
     def createTransaction(self, receiver, amount, type):

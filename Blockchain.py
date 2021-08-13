@@ -12,10 +12,14 @@ class Blockchain:
         self.blocks = [Block.genesis()]
         self.accountModel = AccountModel()
         self.pos = ProofOfStake()
+        self.total_remaining = 100000000  # NEW
 
     def addBlock(self, block):
         self.executeTransactions(block.transactions)
         self.blocks.append(block)
+
+    def listOfBlocks(self):
+        return self.blocks
 
     def toJson(self):
         data = {}
@@ -61,7 +65,11 @@ class Blockchain:
         for transaction in transactions:
             self.executeTransaction(transaction)
 
-    def executeTransaction(self, transaction):
+
+
+# THIS IS WERE YOU MINUS IT FROM THE 10000000.
+
+    def executeTransaction(self, transaction):  # so you need to automate this shit... so it's not 'if it is stake'
         if transaction.type == 'STAKE':
             sender = transaction.senderPublicKey
             receiver = transaction.receiverPublicKey
@@ -76,10 +84,22 @@ class Blockchain:
             self.accountModel.updateBalance(sender, -amount)
             self.accountModel.updateBalance(receiver, amount)
 
-    def nextForger(self):
+# need to find a way for the total amount to go down by stake amount each time.
+
+    def listOfForgersPublicKeys(self): # used to be nextForger
         lastBlockHash = BlockchainUtils.hash(self.blocks[-1].payload()).hexdigest()
-        nextForger = self.pos.forger(lastBlockHash)
-        return nextForger
+        # possibleForgers = self.pos.validatorLots(lastBlockHash)
+        listOfForgersPublicKeys = self.pos.forgers(lastBlockHash)
+        # self.possibleForgers = self.pos.validators()
+        return listOfForgersPublicKeys
+        # return possibleForgers
+        # need to make sure the 100 are hosen from next yeah?????
+        # NB validators must be called AFTER you have called the next forger, otherwise it doesnt exist.
+
+    #def possibleForgers(self):
+        #return self.pos.validators()
+            # return self.pos.validators()
+        ##return self.possibleForgers
 
     def createBlock(self, transactionFromPool, forgerWallet):
         coveredTransactions = self.getCoveredTransactionSet(transactionFromPool)

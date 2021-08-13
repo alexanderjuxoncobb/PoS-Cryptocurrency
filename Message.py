@@ -4,4 +4,3 @@ class Message:
         self.senderConnector = senderConnector
         self.messageType = messageType
         self.data = data
-        

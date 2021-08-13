@@ -10,7 +10,7 @@ class Block:
         self.blockCount = blockCount
         self.timestamp = time.time()
         self.signature = ''
-    
+  
     @staticmethod
     def genesis():
         genesisBlock = Block([], 'genesisHash', 'genesis', 0)
@@ -29,7 +29,7 @@ class Block:
             jsonTransactions.append(transaction.toJson())
         data['transactions'] = jsonTransactions
         return data
-    
+
     def payload(self):
         jsonRepresentation = copy.deepcopy(self.toJson())
         jsonRepresentation['signature'] = ''

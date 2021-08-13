@@ -14,11 +14,13 @@ import sys
 
 if __name__ == '__main__':
 
+    # nb sys.argv[0] is the name of the script
+
     ip = sys.argv[1]
     port = int(sys.argv[2])
     apiPort = int(sys.argv[3])
     keyFile = None
-    if len(sys.argv)>4:
+    if len(sys.argv) > 4:
         keyFile = sys.argv[4]
 
     node = Node(ip, port, keyFile)

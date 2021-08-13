@@ -23,7 +23,7 @@ class TransactionPool:
                 newPoolTransactions.append(poolTransaction)
         self.transactions = newPoolTransactions
 
-    def forgerRequired(self):
-        if len(self.transactions) >= 3:
+    def forgerRequired(self):   # change this for when we want to do the transaction. How long it will take.
+        if len(self.transactions) >= 4:
             return True
         return False
